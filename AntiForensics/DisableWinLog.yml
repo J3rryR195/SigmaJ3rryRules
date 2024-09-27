@@ -1,0 +1,29 @@
+title: Potential Disabling of Windows Event Logs
+id: 79c48f4e-dbe4-4d38-b9f6-8b7e7f9b0b64
+status: experimental
+description: Detects potential attempts to disable Windows Event logs through registry modifications and log-clearing commands.
+references:
+  - https://docs.microsoft.com/en-us/windows/win32/eventlog/event-logging
+author: J3rryR195
+date: 2024-09-24
+tags:
+  - attack.t1070
+logsource:
+  category: registry
+  product: windows
+detection:
+  selection_registry:
+    EventID: 4663  # Object accessed
+    ObjectType: "Key"
+    ObjectName: "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\eventlog"
+    ValueName: "Start"
+    ValueType: "REG_DWORD"
+    ValueData: 4  # Indicates service is disabled
+  selection_command:
+    CommandLine|contains:
+      - 'WEvtUtil.exe cl'
+      - 'WEvtUtil.exec clear-log'
+  condition: selection_registry or selection_command
+falsepositives:
+  - Legitimate administrative activities
+level: critical

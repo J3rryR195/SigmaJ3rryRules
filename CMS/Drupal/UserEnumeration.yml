@@ -1,0 +1,32 @@
+title: User Enumeration
+id: 6d173364-9115-4be8-a223-3297494c9f96
+status: experimental
+description: Detects User Enumeration Via Post Request on Register Page.
+references:
+    - https://raghavendrap120.medium.com/nmap-http-enumeration-e47f5a75f819
+author: J3rryR195
+date: 2024-09-25
+tags:
+    - attack.capec-575
+    - attack.t1589.002
+logsource:
+    category: webserver
+detection:
+    selection:
+        request_uri: "/user/*"
+        request_method: "GET"
+    timeframe: 1m
+    condition: count > 10
+    groupby:
+        - src_ip
+        - request_uri
+        - request_param
+    filters:
+        request_params: "N"
+        timeframe2: 1m
+    aggregation:
+        - count:
+            condition: changing(N)
+falsepositives:
+    - low
+level: High

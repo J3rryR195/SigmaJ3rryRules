@@ -1,0 +1,52 @@
+title: Detection of URL Encoding Bypass Attempts
+id: 12345678-abcd-1234-abcd-1234567890ab
+description: Detects attempts to bypass URL path blocking using URL encoding techniques such as double encoding or Unicode characters.
+status: experimental
+author: J3rryR195
+date: 2024-09-25
+logsource:
+  category: webserver
+  product: apache, nginx, iis, any
+detection:
+  selection:
+    request_uri|contains:
+      - "%2e"         # URL encoded "."
+      - "%252e"       # Double URL encoded "."
+      - "%e3%80%80"   # Fullwidth Space
+      - "%ef%bc%83"   # Fullwidth "#"
+      - "%ef%bc%84"   # Fullwidth "$"
+      - "%ef%bc%85"   # Fullwidth "%"
+      - "%ef%bc%86"   # Fullwidth "&"
+      - "%ef%bc%87"   # Fullwidth "'"
+      - "%ef%bc%88"   # Fullwidth "("
+      - "%ef%bc%89"   # Fullwidth ")"
+      - "%ef%bc%8a"   # Fullwidth "*"
+      - "%ef%bc%8b"   # Fullwidth "+"
+      - "%ef%bc%8c"   # Fullwidth ","
+      - "%ef%bc%8d"   # Fullwidth "-"
+      - "%ef%bc%8e"   # Fullwidth "."
+      - "%ef%bc%8f"   # Fullwidth "/"
+      - "%e2%80%8b"   # Zero Width Space
+      - "%e2%80%8c"   # Zero Width Non-Joiner
+      - "%e2%80%8d"   # Zero Width Joiner
+      - "%e2%80%8e"   # Left-To-Right Mark
+      - "%e2%80%8f"   # Right-To-Left Mark
+      - "%e2%80%a8"   # Line Separator
+      - "%e2%80%a9"   # Paragraph Separator
+  condition: selection
+fields:
+  - method
+  - user_agent
+  - src_ip
+  - src_port
+  - dest_ip
+  - dest_port
+  - request_uri
+  - response_code
+falsepositives:
+  - Normal traffic with legitimate encoded characters in the request URI
+  - Application behavior using encoded characters intentionally
+level: high
+tags:
+  - attack.t1190
+  - attack.defense_evasion

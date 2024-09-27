@@ -1,0 +1,27 @@
+title: WordPress Enumeration
+id: 5582166e-800b-48d4-aee3-68295e23c576
+status: experimental
+description: Detects WordPress Enumeration attempts on basic configuration files of WordPress.
+references:
+  - https://medium.com/@sriharanmahimala125/common-vulnerabilities-in-wordpress-sites-10157635c3a4
+author: J3rryR195
+date: 2024-09-24
+tags:
+  - attack.reconnaissance
+logsource:
+  category: webserver
+  product: wordpress
+detection:
+  selection:
+    uri:
+      - '/wp-config.zip'
+      - '/wp-config.txt'
+      - '/wp-config.php.bak'
+      - '/wp-config.php_orig'
+      - '//wp-config.bak'
+      - '/wp-config.md'
+    response_code: 200
+  condition: selection
+falsepositives:
+  - low
+level: low

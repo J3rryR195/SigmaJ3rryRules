@@ -1,0 +1,30 @@
+title: Potential Drupal Webshell Upload
+id: 11111111-1111-1111-1111-111111111111
+description: Detects potential webshell upload to Drupal using .htaccess and LICENSE.txt for file upload exploitation.
+status: experimental
+author: J3rryR195
+date: 2024/09/25
+logsource:
+    product: webserver
+    service: apache
+    definition: 'This rule applies to Apache web server logs.'
+detection:
+    selection:
+        - request_url|contains: '/media/add/document'
+        - http_method: POST
+        - file_extension|contains:
+            - '.htaccess'
+            - '.txt'
+    condition: selection
+fields:
+    - request_url
+    - http_method
+    - file_extension
+falsepositives:
+    - Normal administrative file uploads of legitimate documents
+    - Users uploading files named `.htaccess` or `LICENSE.txt` for non-malicious reasons
+level: high
+tags:
+    - attack.persistence
+    - attack.t1059.008
+    - attack.t1190

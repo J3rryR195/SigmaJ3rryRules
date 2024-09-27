@@ -1,0 +1,44 @@
+title: Pontetnially Anti-Forensic Tool Usage
+id: 887ac0f7-d40a-4dae-9200-f621365ed4ed
+status: experimental
+description: Detects Pontetnially Anti-Forensic Tool Usage
+    - https://book.hacktricks.xyz/generic-methodologies-and-resources/basic-forensic-methodology/anti-forensic-techniques#delete-windows-event-logs
+    - https://github.com/Claudio-C/awesome-data-sanitization
+author: J3rrryR195
+date: 2024-09-24
+tags:
+    - attack.ta0005
+    - attack.t1027
+logsource:
+    category: file_operations
+    product: file_system
+detection:
+    selection:
+        event_id:
+            - 4663
+            - 4660
+        Image|startswith:
+            - 'killdisk'
+            - 'dban'
+            - 'partedmagic'
+            - 'ccleaner'
+            - 'recuva'
+            - 'shred'
+            - 'darik'
+            - 'diskutility'
+            - 'diskwipe'
+            - 'easttec'
+            - 'eraser'
+            - 'paragon'
+            - 'sdelete'
+            - 'secure_rm'
+            - 'shredit'
+            - 'wipedrive'
+            - 'blancco'
+    condition: selection
+    timeframe: 5m
+    aggregation:
+        - count(): 5
+falsepositives:
+    - Legitimate file management or system administration operations
+level: low

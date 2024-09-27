@@ -1,0 +1,25 @@
+title: Potential Wordpress Brute Force
+id: 9a278bcf-bcda-482d-aa56-71ce375d0326
+description: Detects potential exploitation of the WordPress xmlrpc.php vulnerabilities.
+author: J3rryR195
+status: experimental
+date: 2024-09-24
+references:
+  - https://the-bilal-rizwan.medium.com/wordpress-xmlrpc-php-common-vulnerabilites-how-to-exploit-them-d8d3c8600b32
+logsource:
+  category: webserver
+  product: wordpress
+detection:
+  selection:
+    uri: '/xmlrpc.php'
+    method: 'POST'
+  condition: selection
+  timeframe: 2m
+  response_code: 200
+  aggregation:
+    - count(): 10
+falsepositives:
+  - Legitimate uses of xmlrpc.php such as remote publishing or API interactions
+level: high
+tags:
+  - attack.t1100

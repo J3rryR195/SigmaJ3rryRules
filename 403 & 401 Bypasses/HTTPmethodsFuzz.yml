@@ -1,0 +1,61 @@
+title: Detection of HTTP Verb Fuzzing Attempts
+id: ef3ac9ec-2f66-41eb-b0ab-11ba83424ed7
+description: Detects attempts of HTTP verbs/methods fuzzing, including common methods and invented or overridden methods.
+status: experimental
+author: J3rryR195
+date: 2024-09-25
+logsource:
+  category: webserver
+  product: apache, nginx, iis, any
+detection:
+  selection:
+    user_agent: '*'
+    method:
+      - "GET"
+      - "HEAD"
+      - "POST"
+      - "PUT"
+      - "DELETE"
+      - "CONNECT"
+      - "OPTIONS"
+      - "TRACE"
+      - "PATCH"
+      - "INVENTED"
+      - "HACK"
+  response_code:
+    - 200
+    - 403
+    - 405
+    - 500
+    - 501
+    - 503
+    - 404
+  headers:
+    X-HTTP-Method-Override: "*"
+    content-length: "*"
+  proxy_trace:
+    method: "TRACE"
+    request: '*'
+    proxy_headers: true
+    condition:
+      - request.headers contains "TRACE"
+      - response.headers contains "Via"
+      - response.headers contains "X-Forwarded-For"
+      - response.headers contains "Server"
+  timeframe: 10s
+  condition: selection and (response_code or proxy_trace)
+fields:
+  - method
+  - user_agent
+  - src_ip
+  - src_port
+  - dest_ip
+  - dest_port
+  - request_uri
+falsepositives:
+  - Legitimate usage of uncommon HTTP verbs in testing scenarios
+  - Internal health checks using HTTP verbs like HEAD or OPTIONS
+level: high
+tags:
+  - attack.t1190
+  - attack.impact

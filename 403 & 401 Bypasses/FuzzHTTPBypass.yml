@@ -1,0 +1,61 @@
+title: Fuzz HTTP Bypass
+id: 98765432-efgh-5678-ijkl-9876543210cd
+description: Detects p HTTP method fuzzing, and suspicious header manipulations using tools like wfuzz.
+status: experimental
+author: J3rryR195
+refernce: https://github.com/carlospolop/fuzzhttpbypass/
+date: 2024-09-25
+logsource:
+  category: webserver
+  product: apache, nginx, iis, any
+detection:
+  selection:
+    # Detect abnormal HTTP methods (e.g., fuzzing of HTTP verbs)
+    method|contains:
+      - "GET"
+      - "HEAD"
+      - "POST"
+      - "DELETE"
+      - "CONNECT"
+      - "OPTIONS"
+      - "TRACE"
+      - "PUT"
+      - "INVENTED"
+    # Detect encoded paths (path traversal or fuzzing)
+    request_uri|contains:
+      - "%2e"        # URL encoded "."
+      - "%252e"      # Double URL encoded "."
+      - "%ef%bc%8f"  # Unicode encoded "/"
+    # Detect header fuzzing (fuzzing of forwarded IP headers, user agents, etc.)
+    headers|contains:
+      - "X-Originating-IP"
+      - "X-Forwarded-For"
+      - "X-Forwarded"
+      - "Forwarded-For"
+      - "X-Remote-IP"
+      - "X-Remote-Addr"
+      - "X-ProxyUser-Ip"
+      - "Client-IP"
+      - "True-Client-IP"
+      - "Cluster-Client-IP"
+      - "Host"
+      - "Referer"
+      - "User-Agent"
+  condition: selection
+fields:
+  - method
+  - user_agent
+  - src_ip
+  - src_port
+  - dest_ip
+  - dest_port
+  - request_uri
+  - headers
+  - response_code
+falsepositives:
+  - Normal application behavior using encoded characters in URLs or custom headers
+  - Legitimate use of uncommon HTTP methods by specific services
+level: high
+tags:
+  - attack.t1190
+  - attack.defense_evasion

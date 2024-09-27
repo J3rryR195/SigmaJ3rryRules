@@ -1,0 +1,28 @@
+title: Potential Deletion of USB History
+id: d5a34e9b-ef18-4b5f-bcd5-d4f11e41b5e6
+status: experimental
+description: Detects potential attempts to delete USB history by monitoring registry and file deletions.
+references:
+  - https://docs.microsoft.com/en-us/windows-hardware/drivers/install/usb-storage-devices
+  - https://www.nirsoft.net/utils/usb_devices_view.html
+author: J3rryR195
+date: 2024-09-24
+tags:
+  - attack.ta0005
+logsource:
+  category: registry
+  product: windows
+detection:
+  selection_registry:
+    EventID: 4656  # Handle to an object
+    ObjectType: "Key"
+    ObjectName: "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Enum\\USBSTOR"
+    AccessMask: 0x10000  # DELETE access
+  selection_file:
+    EventID: 4663  # File access
+    FileName: "setupapi.dev.log"
+    AccessMask: 0x10000  # DELETE access
+  condition: selection_registry or selection_file
+falsepositives:
+  - Legitimate administrative activities
+level: critical

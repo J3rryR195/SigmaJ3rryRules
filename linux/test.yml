@@ -1,0 +1,33 @@
+title: Web Application Header Bypass Attempt
+id: 12345678-1234-1234-1234-123456789abc
+status: experimental
+description: Detects attempts to bypass web application security using various HTTP headers.
+author: J3rryR195
+date: 2023-10-01
+logsource:
+  product: web
+  service: http
+detection:
+  selection:
+    http_request:
+      - http_method: "GET"
+      - http_headers:
+          - "X-Original-URL"
+          - "X-Custom-IP-Authorization"
+          - "X-Forwarded-For"
+          - "X-Forwarded-Port"
+          - "X-Remote-IP"
+          - "X-Client-IP"
+          - "X-Host"
+          - "X-ProxyUser-Ip"
+          - "X-rewrite-url"
+  condition: selection
+  timeframe: 1m
+  level: high
+fields:
+  - http_request
+  - http_response
+  - user_agent
+  - source_ip
+  - destination_ip
+  - timestamp
