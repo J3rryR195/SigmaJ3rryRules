@@ -1,8 +1,13 @@
-<div>
-  <picture>
-  <img width="454" align="center" alt="Sigma Logo" src="https://sigmahq.io/sigma-specification/media/images/sigma_logo_light.png">
+<a href="https://sigmahq.io/">
+<p align="center">
+<br />
+<picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://sigmahq.io/sigma-specification/media/images/sigma_logo_light.png">
-</picture> 
+  <img width="454" alt="Sigma Logo" src="https://sigmahq.io/sigma-specification/media/images/sigma_logo_light.png">
+</picture>
+</p>
+</a>
+<br />
 
 # Sigmaj3rryRules - Generic Signature Format for SIEM Systems
 # 
