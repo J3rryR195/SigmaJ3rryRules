@@ -1,7 +1,3 @@
-# Sigmaj3rryRules - Generic Signature Format for SIEM Systems
-# 
-Collection of Sigma rules and Use Case Managment of the Offenses.Testing Threat Hunting via Sigma rules.
-
 <a href="https://sigmahq.io/">
 <p align="center">
 <br />
@@ -11,14 +7,9 @@ Collection of Sigma rules and Use Case Managment of the Offenses.Testing Threat 
 </picture>
 </p>
 </a>
-<br />
- 
-<a href="https://sigmahq.io/">
-<p align="center">
-<br />
 
-</p>
-</a>
-<br />
-</div>
+# Sigmaj3rryRules - Generic Signature Format for SIEM Systems
+# 
+Collection of Sigma rules and Use Case Managment of the Offenses.Testing Threat Hunting via Sigma rules.
+
 
