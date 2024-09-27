@@ -1,4 +1,5 @@
-<picture>
+<div>
+  <picture>
   <img width="454" align="center" alt="Sigma Logo" src="https://sigmahq.io/sigma-specification/media/images/sigma_logo_light.png">
   <source media="(prefers-color-scheme: dark)" srcset="https://sigmahq.io/sigma-specification/media/images/sigma_logo_light.png">
 </picture> 
@@ -14,3 +15,5 @@ Collection of Sigma rules and Use Case Managment of the Offenses.Testing Threat 
 </p>
 </a>
 <br />
+</div>
+
