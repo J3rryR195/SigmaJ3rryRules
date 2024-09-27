@@ -1,4 +1,4 @@
-  <img width="454" allign="center" alt="Sigma Logo" src="https://sigmahq.io/sigma-specification/media/images/sigma_logo_light.png">
+  <img width="454" align="center" alt="Sigma Logo" src="https://sigmahq.io/sigma-specification/media/images/sigma_logo_light.png">
 
 # Sigmaj3rryRules - Generic Signature Format for SIEM Systems
 # 
