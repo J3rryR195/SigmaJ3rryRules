@@ -1,0 +1,21 @@
+title: Delete History
+id: ccbe0039-4519-484a-bc7c-9d01085a4e5e
+status: experimental
+description: Detects History deletion via terminal
+references:
+author: J3rrryR195
+date: 2024-09-27
+tags:
+    - attack.resource_development
+logsource:
+    product: linux
+detection:
+    selection:
+        CommandLine|contains:
+            - 'history -c'
+            - 'cat /dev/null > ~.bash_history && history –c && exit'
+            - 'history -w'
+    condition: selection
+falsepositives:
+    - Unknown
+level: critical
