@@ -3,7 +3,7 @@ id: e4229cde-5502-4788-b7a9-06a0b35093b2
 status: experimental
 description: Detects 
 references:
-    - https://book.hacktricks.xyz/linux-hardening/privilege-escalation#process-memory
+    - 
 author: J3rrryR195
 date: 2024-09-27
 tags:
