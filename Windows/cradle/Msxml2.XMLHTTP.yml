@@ -1,0 +1,25 @@
+title: Msxml2.XMLHTTP Download Cradle
+id: b9dcc4f1-c158-40d9-9af8-83125cc7f84a
+status: experimental
+description: DetecDetects use of Msxml2.XMLHTTP object to download and execute a script
+references:
+    - https://mgreen27.github.io/posts/2018/04/02/DownloadCradle.html
+author: J3rrryR195
+date: 2024-09-28
+tags:
+    - attack.t1059.001
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection:
+        Image|endswith:
+            - '\\powershell.exe'
+        CommandLine:
+            - 'Msxml2.XMLHTTP'
+            - '.open'
+            - 'GET'
+    condition: selection
+falsepositives:
+    - Legitimate administration tasks using XMLHTTP
+level: critical

@@ -1,0 +1,24 @@
+title: WebClient Download Cradle
+id: c26ae805-eed7-423f-b5d4-54e60845e56d
+status: experimental
+description: Detects use of the WebClient object to download and execute a script 
+references:
+    - 
+author: J3rrryR195
+date: 2024-09-28
+tags:
+    - attack.t1059.001
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection:
+        Image|endswith:
+            - '\\powershell.exe'
+        CommandLine:
+            - 'New-Object Net.WebClient'
+            - 'DownloadString'
+    condition: selection
+falsepositives:
+    -  Legitimate administration scripts
+level: critical

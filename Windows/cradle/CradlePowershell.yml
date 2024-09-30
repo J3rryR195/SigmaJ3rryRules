@@ -1,0 +1,28 @@
+title: Cradle Powershell
+id: 8ffd3d8d-3001-4929-8c3f-cb7fba309456
+status: experimental
+description: Detects Cradle Powershell
+references:
+    - https://mgreen27.github.io/posts/2018/04/02/DownloadCradle.html
+author: J3rrryR195
+date: 2024-09-27
+tags:
+    - attack.t1059.001
+    - attack.t1035
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection:
+        Image|endiwth:
+            - '\powershell.exe'
+        CommandLine|re:
+            - 'iex\s*\(\s*New-Object\s+Net\.WebClient\)\.DownloadString\([\'"][a-zA-Z]+://[^ ]+/.*\.ps1[\'"]\)'
+            - '\$ie\s*=\s*New-Object\s+-ComObject\s+InternetExplorer\.Application;.*\$ie\.navigate\([\'"][a-zA-Z]+://[^ ]+/.*\.ps1[\'"]\)'
+            - 'iex\s*\(iwr\s+[\'"][a-zA-Z]+://[^ ]+/.*\.ps1[\'"]\)'
+            - '\$h\s*=\s*New-Object\s+-ComObject\s+Msxml2\.XMLHTTP;.*\$h\.open\([\'"]GET[\'"],\s*[\'"][a-zA-Z]+://[^ ]+/.*\.ps1[\'"]\)'
+            - '\$wr\s*=\s*\[System\.NET\.WebRequest\]::Create\([\'"][a-zA-Z]+://[^ ]+/.*\.ps1[\'"]\);.*'
+    condition: selection
+falsepositives:
+    - Unknown
+level: critical
