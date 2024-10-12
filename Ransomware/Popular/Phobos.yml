@@ -1,0 +1,92 @@
+title: Phobos
+id: b0724871-f7b7-4e42-8612-d4dff06e8e02
+status: experimental
+description: Detects backup deletions in Windows systems that could indicate Phobos ransomware activity. 
+references:
+    - https://hivepro.com/wp-content/uploads/2023/10/In-Depth-Analysis-of-Phobos-Ransomware_TA2023426-Updated.pdf
+author: J3rrryR195
+date: 2024-10-07
+tags:
+    - attack.privilege_escalation
+    - attack.execution
+    - attack.initial_access
+logsource:
+    product: windows
+    service: system
+detection:
+    selection_backup_deletion:
+        EventID:
+            - 612
+            - 524
+            - 753
+    selection_registry_process:
+        EventID: 4657
+        NewValueType|contains: 'rdpclip.exe'
+        ObjectName|contains:
+            - 'SOFTWARE\Microsoft\Windows\CurrentVersion\Run'
+            - 'SOFTWARE\Microsoft\Windows\CurrentVersion\Runonce'
+    selection_ioc_files:
+        EventID: 4663
+        ObjectName|contains:
+            - '%LocalAppData%\horsemoney.exe'
+            - '%AppData%\Microsoft\Windows\StartMenu\Programs\Startup\horsemoney.exe'
+            - '%AllUsersProfile%\Microsoft\Windows\StartMenu\Programs\Startup\horsemoney.exe'
+    selection_registry_ioc:
+        EventID: 4657
+        ObjectName|contains:
+            - 'HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Windows\CurrentVersion\Run\horsemoney'
+            - 'HKEY_CURRENT_USER\SOFTWARE\WOW6432Node\Windows\CurrentVersion\Run\horsemoney'
+    selection_emails:
+        EventID: 5156
+        TargetUserName|contains:
+            - 'cadillac.407@aol.com'
+            - 'OttoZimmerman@protonmail.ch'
+            - 'decryptyourfiles@firemail.cc'
+            - 'helperfiles@onionmail.org'
+            - 'fobosamerika@protonmail.ch'
+            - 'chocolate_muffin@tutanota.com'
+            - 'precorpman@onionmail.org'
+            - 'helpfiles@onionmail.org'
+            - 'megaport@tuta.io'
+            - 'MichaelWayne1973@tutanota.com'
+            - 'fastway@tuta.io'
+            - 'normanbaker1929@gmx.com'
+            - 'recovery2021@inboxhub.net'
+            - 'xgen@tuta.io'
+            - 'sara_conor@gmx.com'
+    selection_ipv4:
+        EventID: 5156
+        SourceIp:
+            - '104.26.5.223'
+            - '185.112.82.235'
+            - '185.112.82.236'
+            - '185.202.0.111'
+            - '194.165.16.4'
+            - '45.9.74.14'
+            - '147.78.47.224'
+    selection_hashes:
+        EventID: 4660
+        Hash:
+            - '0000599cbc6e5b0633c5a6261c79e4d3d81005c77845c6b0679d854884a8e02f'
+            - '7451be9b65b956ee667081e1141531514b1ec348e7081b5a9cd1308a98eec8f0'
+            - '518544e56e8ccee401ffa1b0a01a10ce23e49ec21ec441c6c7c3951b01c1b19c'
+            - '9215550ce3b164972413a329ab697012e909d543e8ac05d9901095016dd3fc6c'
+            - '482754d66d01aa3579f007c2b3c3d0591865eb60ba60b9c28c66fe6f4ac53c52'
+    selection_urls:
+        EventID: 5156
+        DestinationHostname|contains:
+            - 'paste.ee/r/1q1gD'
+            - 'paste.ee/r/OwAyf'
+            - 'www.patreon.com/ccatss'
+            - '178.62.19.66/campo/v/v'
+            - 'icq.im/HORSEMONEY'
+    selection_domains:
+        EventID: 5156
+        DestinationHostname|contains:
+            - 'adstat477d.xyz'
+            - 'demstat577d.xyz'
+            - 'serverxlogs21.xyz'
+    condition: selection_backup_deletion or selection_registry_process or selection_ioc_files or selection_registry_ioc or selection_emails or selection_ipv4 or selection_hashes or selection_urls or selection_domains
+falsepositives:
+    - Legitimate system administration or software installations.
+level: critical
