@@ -1,0 +1,24 @@
+title: Phishing Attempt via trycloudflare.com
+id: e900a4f9-b278-40e0-a68f-b3223422d814
+status: experimental
+description: Detects access to URLs ending with trycloudflare.com, which may indicate phishing attempts.
+references:
+    - https://github.com/htr-tech/zphisher/tree/master
+author: J3rrryR195
+date: 2024-09-28
+tags:
+    - attack.t1566
+logsource:
+    category: network_traffic
+    selection:
+        cs-uri-query|contains:
+            - 'trycloudflare.com'
+    condition: selection
+fields:
+- url
+- action
+- user
+falsepositives:
+    - Unknown
+level: critical
+
